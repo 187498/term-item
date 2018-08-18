@@ -1,0 +1,87 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.i18n.encoding" value="GBK"/>
+	<constant name="struts.custom.i18n.resources" value="globalMessages"/>
+	<package name="default" extends="struts-default">
+	<interceptors>
+		<interceptor name="SessionInterceptor" class="com.cjg.bank.action.interceptor.SessionInterceptor"/>
+	</interceptors>	
+	<global-results>
+		<result name="loginPage">/login.jsp</result>
+		<result name="abilityError">/abilityError.jsp</result>
+		<result name="Error">/Error.jsp</result>
+	</global-results>
+		<action name="loginValidate" class="com.cjg.bank.action.validateAction.LoginValidate">
+			<result name="input">/login.jsp</result>
+			<result type="chain">login</result>
+		</action>
+		<action name="login" class="com.cjg.bank.action.LoginAction" method="login">
+			<result name="loginSuccess">/trade.jsp</result>
+			<result name="loginError">/loginError.jsp</result>
+		</action>
+		<action name="regValidate" class="com.cjg.bank.action.validateAction.RegistValidate">
+			<result name="input">/regist.jsp</result>
+			<result type="chain">regist</result>
+		</action>
+		<action name="regist" class="com.cjg.bank.action.UserAction" method="regist">
+			<result name="invalid.token">/wrong.jsp</result>
+			<result name="registSuccess">/registSuccess.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="tokenSession"/>
+		</action>
+		<action name="smoneyValidate" class="com.cjg.bank.action.validateAction.MoneyValidate">
+			<result name="input">/save.jsp</result>
+			<result type="chain">saveMoney</result>
+		</action>
+		<action name="saveMoney" class="com.cjg.bank.action.TradeAction" method="saveMoney">
+			<result name="invalid.token">/wrong.jsp</result>
+			<result name="saveSuccess" type="chain">selectBalance</result>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="tokenSession"/>
+			<interceptor-ref name="SessionInterceptor"/>
+		</action>
+		<action name="fmoneyValidate" class="com.cjg.bank.action.validateAction.MoneyValidate">
+			<result name="input">/fetch.jsp</result>
+			<result type="chain">fetchMoney</result>
+		</action>
+		<action name="fetchMoney" class="com.cjg.bank.action.TradeAction" method="fetchMoney">
+			<result name="invalid.token">/wrong.jsp</result>
+			<result name="fetchSuccess" type="chain">selectBalance</result>
+			<result name="fetchError">/fechError.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="tokenSession"/>
+			<interceptor-ref name="SessionInterceptor"/>
+		</action>
+		<action name="selectBalance" class="com.cjg.bank.action.TradeAction" method="selectBalance">
+			<result name="selectBalance">/tradeSuccess.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="SessionInterceptor"/>
+		</action>
+		<action name="selectTradeInfo" class="com.cjg.bank.action.TradeAction" method="tradeInfo">
+			<result name="selectTradeInfo">/tradeInfo.jsp</result>
+		</action>
+		<action name="selectUser" class="com.cjg.bank.action.UserAction" method="selectUser">
+			<result name="selectUser">/userInfo.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="SessionInterceptor"/>
+		</action>
+		<action name="updateUserValidate" class="com.cjg.bank.action.validateAction.UpdateUserValidate">
+			<result name="input">/updateUser.jsp</result>
+			<result type="chain">updateUser</result>
+		</action>
+		<action name="updateUser" class="com.cjg.bank.action.UserAction" method="updateUser">
+			<result name="updateSuccess" >/updateUserSuccess.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="SessionInterceptor"/>
+		</action>
+		<action name="logout" class="com.cjg.bank.action.LoginAction" method="logout">
+			<result name="logout">/logout.jsp</result>
+		</action>
+		<action name="deleteUserInfo" class="com.cjg.bank.action.UserAction" method="deleteUser">
+			<result name="deleteSuccess">/deleteSuccess.jsp</result>
+			<result name="deleteError">/deleteError.jsp</result>
+		</action>
+	</package>
+</struts>
